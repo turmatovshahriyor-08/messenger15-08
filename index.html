@@ -30,7 +30,7 @@ button{border:0;background:var(--me);color:#fff;border-radius:18px;padding:10px 
 #lf{background:none;color:var(--mute);font-size:14px}
 </style></head><body>
 <div id="auth"><h2>💬 Messenger</h2>
-<input id="em" type="email" placeholder="Email" autocomplete="email">
+<input id="em" type="text" placeholder="Login" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false">
 <input id="pw" type="password" placeholder="Parol (kamida 6 belgi)" autocomplete="current-password">
 <div id="err"></div>
 <button id="in">Kirish</button><button id="up" class="sec">Ro‘yxatdan o‘tish</button></div>
@@ -46,8 +46,9 @@ import {getFirestore,collection,addDoc,query,orderBy,limit,onSnapshot,doc,setDoc
 const app=initializeApp({apiKey:"AIzaSyCUHh0ULEcQ9BbuKpkwRPhty3nY9Te_j6g",authDomain:"messenger15-08.firebaseapp.com",projectId:"messenger15-08",storageBucket:"messenger15-08.firebasestorage.app",messagingSenderId:"730505193895",appId:"1:730505193895:web:afd3e545a6314988652e82"});
 const auth=getAuth(app),db=getFirestore(app);
 const $=id=>document.getElementById(id);let unsub=null;
-const msg=e=>({"auth/invalid-credential":"Email yoki parol noto‘g‘ri","auth/email-already-in-use":"Bu email band, “Kirish”ni bosing","auth/weak-password":"Parol kamida 6 belgi bo‘lsin","auth/invalid-email":"Email noto‘g‘ri","auth/too-many-requests":"Juda ko‘p urinish. 10–15 daqiqa kuting"}[e.code]||"Xato: "+e.code);
-const go=f=>async()=>{$('err').textContent='';try{await f(auth,$('em').value.trim(),$('pw').value)}catch(e){$('err').textContent=msg(e)}};
+const msg=e=>({"auth/invalid-credential":"Login yoki parol noto‘g‘ri","auth/email-already-in-use":"Bu login band, “Kirish”ni bosing","auth/weak-password":"Parol kamida 6 belgi bo‘lsin","auth/invalid-email":"Email noto‘g‘ri","auth/too-many-requests":"Juda ko‘p urinish. 10–15 daqiqa kuting"}[e.code]||"Xato: "+e.code);
+const U=['shahriyor08','dilruza15'];
+const go=f=>async()=>{$('err').textContent='';const n=$('em').value.trim().toLowerCase();if(!U.includes(n)){$('err').textContent='Bunday login yo‘q';return}try{await f(auth,n+'@messenger.app',$('pw').value)}catch(e){$('err').textContent=msg(e)}};
 $('in').onclick=go(signInWithEmailAndPassword);$('up').onclick=go(createUserWithEmailAndPassword);
 $('out').onclick=()=>signOut(auth);
 onAuthStateChanged(auth,u=>{
