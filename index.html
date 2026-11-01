@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v4 -->
+<!-- v5 -->
 <html lang="uz"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#2f6fed"><link rel="manifest" href="manifest.json">
@@ -45,7 +45,7 @@ button:disabled{opacity:.5}.ic{background:none;font-size:22px;padding:6px 4px}
 <input id="em" type="text" placeholder="Login" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false">
 <input id="pw" type="password" placeholder="Parol (kamida 6 belgi)" autocomplete="current-password">
 <div id="err"></div><button id="in">Kirish</button><button id="up" class="sec">Ro‘yxatdan o‘tish</button></div>
-<header hidden id="hd"><div><b>💬 Messenger</b><div id="ty"></div></div><button id="out">Chiqish</button></header>
+<header hidden id="hd"><div><b>💬 Messenger</b><div id="ty"></div></div><div><button id="lk" title="Bloklash">🔒</button><button id="out">Chiqish</button></div></header>
 <div id="pb" hidden><span id="pt"></span><button id="pu">✕</button></div>
 <div id="list" hidden></div>
 <div id="eb" hidden><span>✏️ Xabar tahrirlanmoqda</span><button id="ec">✕</button></div>
@@ -79,6 +79,7 @@ const go=(f,isIn)=>async()=>{if(busy)return;const n=$('em').value.trim().toLower
 $('in').onclick=go(signInWithEmailAndPassword,true);$('up').onclick=go(createUserWithEmailAndPassword,false);
 $('pw').addEventListener('keydown',e=>{if(e.key==='Enter')$('in').click()});
 $('out').onclick=()=>signOut(auth);
+$('lk').onclick=()=>lockInit();
 
 onAuthStateChanged(auth,u=>{
  $('boot').hidden=true;
