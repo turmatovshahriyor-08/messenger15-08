@@ -8,82 +8,142 @@
 @media(prefers-color-scheme:dark){:root{--bg:#101216;--card:#181b21;--text:#eceef2;--mute:#8b93a3;--me:#3b7bff;--them:#252a33;--line:#2a2f39}}
 *{box-sizing:border-box}[hidden]{display:none!important}html,body{height:100%;margin:0}
 body{background:var(--bg);color:var(--text);font:16px/1.4 system-ui,sans-serif;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
-header{padding:12px 16px;background:var(--card);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
-header button{background:none;color:var(--mute);padding:0}
+header{padding:10px 16px;background:var(--card);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+header button,#pb button,#eb button{background:none;color:var(--mute);padding:4px 8px}
+#ty{font-size:12px;color:var(--me);min-height:16px}
+#pb,#eb{display:flex;align-items:center;justify-content:space-between;padding:6px 14px;background:var(--card);border-bottom:1px solid var(--line);font-size:14px}
+#pb span{flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;cursor:pointer;color:var(--me)}
 #list{flex:1;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column;gap:6px}
-.m{max-width:78%;padding:8px 12px;border-radius:16px;background:var(--them);white-space:pre-wrap;word-wrap:break-word;align-self:flex-start}
-.m.me{cursor:pointer;align-self:flex-end;background:var(--me);color:#fff}
-.m small{display:block;font-size:11px;opacity:.65;text-align:right}
-.bar{display:flex;gap:8px;padding:10px 12px;background:var(--card);border-top:1px solid var(--line)}
-textarea,input{flex:1;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:18px;padding:10px 14px;font:inherit}
+.m{max-width:80%;padding:8px 12px;border-radius:16px;background:var(--them);white-space:pre-wrap;word-wrap:break-word;align-self:flex-start;cursor:pointer}
+.m.me{align-self:flex-end;background:var(--me);color:#fff}
+.m.pin{outline:2px solid #f5b301}
+.m img{max-width:100%;max-height:300px;border-radius:10px;display:block;margin-bottom:4px}
+.m a{text-decoration:underline;display:block;margin-bottom:2px}
+.m small{display:block;font-size:11px;opacity:.7;text-align:right}
+.bar{display:flex;gap:8px;padding:10px 12px;background:var(--card);border-top:1px solid var(--line);align-items:flex-end}
+textarea,input[type=text],input[type=password]{flex:1;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:18px;padding:10px 14px;font:inherit}
 textarea{resize:none;max-height:110px}
 button{border:0;background:var(--me);color:#fff;border-radius:18px;padding:10px 18px;font:inherit;font-weight:600}
+button:disabled{opacity:.5}.ic{background:none;font-size:22px;padding:6px 4px}
 #auth{margin:auto;width:min(340px,90%);display:flex;flex-direction:column;gap:10px;text-align:center}
-#auth h2{margin:0 0 6px}#err{color:#e5484d;font-size:14px;min-height:20px}
-.sec{background:none;color:var(--me)}
-#ty{font-size:12px;color:var(--me);min-height:16px}#lock{position:fixed;inset:0;background:var(--bg);z-index:9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
-#lock[hidden]{display:none}#lt{font-weight:600;font-size:18px}#ld{display:flex;gap:14px}
+#auth h2{margin:0 0 6px}#err{color:#e5484d;font-size:14px;min-height:20px}.sec{background:none;color:var(--me)}
+#sheet{position:fixed;inset:0;background:#0007;z-index:8;display:flex;align-items:flex-end}
+#sc{width:100%;background:var(--card);border-radius:18px 18px 0 0;padding:10px 12px calc(12px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:6px}
+#sc button{background:var(--bg);color:var(--text);text-align:left;border-radius:12px}
+#lock{position:fixed;inset:0;background:var(--bg);z-index:9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px}
+#lt{font-weight:600;font-size:18px}#ld{display:flex;gap:14px}
 #ld i{width:14px;height:14px;border-radius:50%;border:2px solid var(--me)}#ld i.f{background:var(--me)}
 #lm{color:#e5484d;min-height:20px;font-size:14px}
 #pad{display:grid;grid-template-columns:repeat(3,76px);gap:12px}
 #pad button{height:64px;border-radius:50%;background:var(--card);color:var(--text);border:1px solid var(--line);font-size:24px;padding:0}
 #lf{background:none;color:var(--mute);font-size:14px}
 </style></head><body>
-<div id="auth"><h2>💬 Messenger</h2>
+<div id="auth" hidden><h2>💬 Messenger</h2>
 <input id="em" type="text" placeholder="Login" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false">
 <input id="pw" type="password" placeholder="Parol (kamida 6 belgi)" autocomplete="current-password">
-<div id="err"></div>
-<button id="in">Kirish</button><button id="up" class="sec">Ro‘yxatdan o‘tish</button></div>
+<div id="err"></div><button id="in">Kirish</button><button id="up" class="sec">Ro‘yxatdan o‘tish</button></div>
 <header hidden id="hd"><div><b>💬 Messenger</b><div id="ty"></div></div><button id="out">Chiqish</button></header>
+<div id="pb" hidden><span id="pt"></span><button id="pu">✕</button></div>
 <div id="list" hidden></div>
-<div class="bar" hidden id="bar"><textarea id="t" rows="1" placeholder="Xabar yozing…"></textarea><button id="s">➤</button></div>
-<div id="lock" hidden><div id="lt"></div><div id="ld"><i></i><i></i><i></i><i></i></div><div id="lm"></div>
-<div id="pad"></div><button id="lf">Kodni unutdim</button></div>
+<div id="eb" hidden><span>✏️ Xabar tahrirlanmoqda</span><button id="ec">✕</button></div>
+<div class="bar" hidden id="bar"><button id="att" class="ic">📎</button><textarea id="t" rows="1" placeholder="Xabar yozing…"></textarea><button id="s">➤</button></div>
+<input type="file" id="fi" hidden>
+<div id="sheet" hidden><div id="sc"></div></div>
+<div id="lock" hidden><div id="lt"></div><div id="ld"><i></i><i></i><i></i><i></i></div><div id="lm"></div><div id="pad"></div><button id="lf">Kodni unutdim</button></div>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import {getFirestore,collection,addDoc,query,orderBy,limit,onSnapshot,doc,setDoc,deleteDoc} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import {getFirestore,collection,addDoc,query,orderBy,limit,onSnapshot,doc,setDoc,deleteDoc,updateDoc} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 const app=initializeApp({apiKey:"AIzaSyCUHh0ULEcQ9BbuKpkwRPhty3nY9Te_j6g",authDomain:"messenger15-08.firebaseapp.com",projectId:"messenger15-08",storageBucket:"messenger15-08.firebasestorage.app",messagingSenderId:"730505193895",appId:"1:730505193895:web:afd3e545a6314988652e82"});
-const auth=getAuth(app),db=getFirestore(app);
-const $=id=>document.getElementById(id);let unsub=null;
-const msg=e=>({"auth/invalid-credential":"Login yoki parol noto‘g‘ri","auth/email-already-in-use":"Bu login band, “Kirish”ni bosing","auth/weak-password":"Parol kamida 6 belgi bo‘lsin","auth/invalid-email":"Email noto‘g‘ri","auth/too-many-requests":"Juda ko‘p urinish. 10–15 daqiqa kuting"}[e.code]||"Xato: "+e.code);
+const auth=getAuth(app),db=getFirestore(app),$=id=>document.getElementById(id);
+let unsub,rdUnsub,tyUnsub,pinUnsub,cache=[],readMap={},tyMap={},myRead=0,lastTy=0,editing=null,pin=null;
+
+/* ---- Kirish ---- */
 const U=['shahriyor08','dilruza15'];
-const go=f=>async()=>{$('err').textContent='';const n=$('em').value.trim().toLowerCase();if(!U.includes(n)){$('err').textContent='Bunday login yo‘q';return}try{await f(auth,n+'@messenger.app',$('pw').value)}catch(e){$('err').textContent=msg(e)}};
-$('in').onclick=go(signInWithEmailAndPassword);$('up').onclick=go(createUserWithEmailAndPassword);
+const msg=(e,isIn)=>({"auth/invalid-credential":isIn?"Login yoki parol noto‘g‘ri. Hisob hali ochilmagan bo‘lsa, “Ro‘yxatdan o‘tish”ni bosing":"Login yoki parol noto‘g‘ri","auth/email-already-in-use":"Bu login band. “Kirish”ni bosing","auth/weak-password":"Parol kamida 6 belgi bo‘lsin","auth/too-many-requests":"Juda ko‘p urinish. 10–15 daqiqa kuting","auth/network-request-failed":"Internet yo‘q","auth/admin-restricted-operation":"Yangi hisob ochish yopilgan","auth/operation-not-allowed":"Yangi hisob ochish yopilgan"}[e.code]||"Xato: "+e.code);
+let busy=false;
+const go=(f,isIn)=>async()=>{if(busy)return;const n=$('em').value.trim().toLowerCase();$('err').textContent='';
+ if(!U.includes(n)){$('err').textContent='Bunday login yo‘q';return}
+ busy=true;$('in').disabled=$('up').disabled=true;
+ try{await f(auth,n+'@messenger.app',$('pw').value)}catch(e){$('err').textContent=msg(e,isIn)}
+ busy=false;$('in').disabled=$('up').disabled=false};
+$('in').onclick=go(signInWithEmailAndPassword,true);$('up').onclick=go(createUserWithEmailAndPassword,false);
+$('pw').addEventListener('keydown',e=>{if(e.key==='Enter')$('in').click()});
 $('out').onclick=()=>signOut(auth);
+
 onAuthStateChanged(auth,u=>{
- const on=!!u;if(on)lockInit();else $('lock').hidden=true;$('auth').hidden=on;['hd','list','bar'].forEach(i=>$(i).hidden=!on);
- if(unsub){unsub();unsub=null}
- if(!on)return;
- const q=query(collection(db,'messages'),orderBy('t'),limit(300));
- cache=[];readMap={};myRead=0;
- unsub=onSnapshot(q,s=>{cache=s.docs;render(u,true)},e=>{$('list').textContent='Ruxsat yo‘q yoki xato: '+e.code});
- if(rdUnsub)rdUnsub();
- rdUnsub=onSnapshot(collection(db,'reads'),s=>{readMap={};s.forEach(d=>{if(d.id!==u.uid)readMap[d.id]=d.data().t||0});render(u,false)},()=>{});
+ const on=!!u;$('auth').hidden=on;['hd','list','bar'].forEach(i=>$(i).hidden=!on);
+ [unsub,rdUnsub,tyUnsub,pinUnsub].forEach(f=>f&&f());unsub=rdUnsub=tyUnsub=pinUnsub=null;
+ cache=[];readMap={};tyMap={};myRead=0;pin=null;stopEdit();showTy();showPin();$('sheet').hidden=true;
+ if(!on){$('lock').hidden=true;$('pw').value='';$('err').textContent='';$('list').textContent='';return}
+ lockInit();
+ unsub=onSnapshot(query(collection(db,'messages'),orderBy('t'),limit(300)),s=>{cache=s.docs;render(true)},e=>{$('list').textContent='Ruxsat yo‘q yoki xato: '+e.code});
+ rdUnsub=onSnapshot(collection(db,'reads'),s=>{readMap={};s.forEach(d=>{if(d.id!==u.uid)readMap[d.id]=d.data().t||0});render(false)},()=>{});
+ tyUnsub=onSnapshot(collection(db,'typing'),s=>{tyMap={};s.forEach(d=>{if(d.id!==u.uid)tyMap[d.id]=d.data().t||0});showTy()},()=>{});
+ pinUnsub=onSnapshot(doc(db,'meta','pin'),s=>{pin=s.exists()?s.data():null;showPin();render(false)},()=>{});
 });
-async function send(){const v=$('t').value.trim();if(!v||!auth.currentUser)return;$('t').value='';lastTy=0;setTy(0);
- try{await addDoc(collection(db,'messages'),{text:v,uid:auth.currentUser.uid,t:Date.now()})}catch(e){$('t').value=v}}
-$('s').onclick=send;
-$('t').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
-/* ---- O‘qildi belgilari ---- */
-let cache=[],readMap={},myRead=0,rdUnsub=null;
-function render(u,scroll){
- const l=$('list'),near=scroll&&(l.scrollHeight-l.scrollTop-l.clientHeight<80||!l.children.length),keep=l.scrollTop;
- const rt=Math.max(0,...Object.values(readMap));
+
+/* ---- Xabarlar ---- */
+function render(scroll){const u=auth.currentUser;if(!u)return;
+ const l=$('list'),near=scroll&&(l.scrollHeight-l.scrollTop-l.clientHeight<80||!l.children.length),keep=l.scrollTop,rt=Math.max(0,...Object.values(readMap));
  l.textContent='';
- cache.forEach(d=>{const x=d.data(),mine=x.uid===u.uid,e=document.createElement('div');e.className='m'+(mine?' me':'');e.textContent=x.text;
-  if(mine)e.onclick=()=>{if(confirm('Xabar ikkala tomondan o‘chirilsinmi?'))deleteDoc(doc(db,'messages',d.id)).catch(()=>alert('O‘chirib bo‘lmadi'))};
-  const m=document.createElement('small');m.textContent=new Date(x.t).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+ cache.forEach(d=>{const x=d.data(),mine=x.uid===u.uid,e=document.createElement('div');
+  e.className='m'+(mine?' me':'')+(pin&&pin.id===d.id?' pin':'');e.id='m'+d.id;
+  if(x.file){if((x.file.type||'').startsWith('image/')){const i=document.createElement('img');i.src=x.file.data;e.appendChild(i)}
+   else{const a=document.createElement('a');a.textContent='📎 '+x.file.name;a.onclick=ev=>{ev.stopPropagation();dl(x.file)};e.appendChild(a)}}
+  if(x.text){const t=document.createElement('div');t.textContent=x.text;e.appendChild(t)}
+  e.onclick=()=>openSheet(d.id,x,mine);
+  const m=document.createElement('small');m.textContent=(x.edited?'tahrirlangan · ':'')+new Date(x.t).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
   if(mine){const k=document.createElement('span');k.textContent=x.t<=rt?' ✓✓':' ✓';if(x.t<=rt)k.style.color='#7fe3ff';m.appendChild(k)}
   e.appendChild(m);l.appendChild(e)});
- if(near)l.scrollTop=l.scrollHeight;else l.scrollTop=keep;
- markRead();
-}
+ if(near)l.scrollTop=l.scrollHeight;else l.scrollTop=keep;markRead()}
+async function dl(f){const b=await (await fetch(f.data)).blob(),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=f.name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),5000)}
+function openSheet(id,x,mine){const c=$('sc');c.textContent='';
+ const add=(t,f)=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>{$('sheet').hidden=true;f&&f()};c.appendChild(b)};
+ const isPin=pin&&pin.id===id;
+ add(isPin?'📌 Qadashni olib tashlash':'📌 Tepaga qadash',()=>isPin?deleteDoc(doc(db,'meta','pin')):setDoc(doc(db,'meta','pin'),{id,text:(x.text||('📎 '+(x.file&&x.file.name))).slice(0,80)}));
+ if(x.file)add('⬇ Yuklab olish',()=>dl(x.file));
+ if(mine&&(x.text||!x.file))add('✏️ Tahrirlash',()=>{editing=id;$('t').value=x.text||'';$('eb').hidden=false;$('s').textContent='✓';$('t').focus()});
+ if(mine)add('🗑 O‘chirish',()=>{if(confirm('Xabar ikkala tomondan o‘chirilsinmi?')){deleteDoc(doc(db,'messages',id)).catch(()=>alert('O‘chirib bo‘lmadi'));if(isPin)deleteDoc(doc(db,'meta','pin')).catch(()=>{})}});
+ add('Bekor qilish');$('sheet').hidden=false}
+$('sheet').onclick=e=>{if(e.target.id==='sheet')$('sheet').hidden=true};
+function showPin(){$('pb').hidden=!pin||$('hd').hidden;$('pt').textContent=pin?'📌 '+pin.text:''}
+$('pt').onclick=()=>{if(pin){const e=document.getElementById('m'+pin.id);if(e)e.scrollIntoView({block:'center',behavior:'smooth'})}};
+$('pu').onclick=()=>deleteDoc(doc(db,'meta','pin')).catch(()=>{});
+function stopEdit(){editing=null;$('eb').hidden=true;$('s').textContent='➤'}
+$('ec').onclick=()=>{stopEdit();$('t').value=''};
+async function send(){const u=auth.currentUser,v=$('t').value.trim();if(!v||!u)return;
+ if(editing){const id=editing;stopEdit();$('t').value='';try{await updateDoc(doc(db,'messages',id),{text:v,edited:true})}catch(e){alert('Tahrirlab bo‘lmadi')}return}
+ $('t').value='';lastTy=0;setTy(0);
+ try{await addDoc(collection(db,'messages'),{text:v,uid:u.uid,t:Date.now()})}catch(e){$('t').value=v}}
+$('s').onclick=send;
+$('t').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
+
+/* ---- Fayl yuborish (kichik fayllar, Firestore ichida) ---- */
+const readURL=f=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=no;r.readAsDataURL(f)});
+async function shrink(f){const bmp=await createImageBitmap(f);
+ for(const [mx,q] of [[1280,.72],[1024,.6],[800,.5]]){const k=Math.min(1,mx/Math.max(bmp.width,bmp.height)),c=document.createElement('canvas');c.width=Math.round(bmp.width*k);c.height=Math.round(bmp.height*k);
+  c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);const d=c.toDataURL('image/jpeg',q);if(d.length<800000)return d}
+ throw 0}
+$('att').onclick=()=>$('fi').click();
+$('fi').onchange=async()=>{const f=$('fi').files[0],u=auth.currentUser;$('fi').value='';if(!f||!u)return;
+ try{let type=f.type||'application/octet-stream',data;
+  if(type.startsWith('image/')&&type!=='image/gif'){data=await shrink(f);type='image/jpeg'}
+  else{if(f.size>550000){alert('Fayl 550 KB dan oshmasin. Rasmlar avtomatik kichraytiriladi.');return}data=await readURL(f)}
+  await addDoc(collection(db,'messages'),{text:$('t').value.trim(),uid:u.uid,t:Date.now(),file:{name:f.name,type,data}});$('t').value=''
+ }catch(e){alert('Fayl yuborilmadi')}};
+
+/* ---- Yozmoqda… ---- */
+const setTy=v=>{const u=auth.currentUser;if(u)setDoc(doc(db,'typing',u.uid),{t:v}).catch(()=>{})};
+const showTy=()=>{$('ty').textContent=Object.values(tyMap).some(t=>Date.now()-t<5000)?'yozmoqda…':''};
+setInterval(showTy,1000);
+$('t').addEventListener('input',()=>{if(editing)return;const n=Date.now();if($('t').value.trim()===''){lastTy=0;setTy(0)}else if(n-lastTy>2000){lastTy=n;setTy(n)}});
+
+/* ---- O‘qildi ---- */
 function markRead(){const u=auth.currentUser;if(!u||document.hidden||!$('lock').hidden)return;
  const t=Math.max(0,...cache.map(d=>d.data()).filter(x=>x.uid!==u.uid).map(x=>x.t));
  if(t>myRead){myRead=t;setDoc(doc(db,'reads',u.uid),{t}).catch(()=>{myRead=0})}}
 setInterval(markRead,2000);
-document.addEventListener('visibilitychange',markRead);
 
 /* ---- Kirish kodi (PIN) ---- */
 const K='pinh',enc=async p=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode('msgr:'+p)))].map(b=>b.toString(16).padStart(2,'0')).join('');
@@ -95,22 +155,13 @@ function lockInit(){buf='';first='';mode=localStorage.getItem(K)?'open':'set';$(
 async function key(k){
  if(Date.now()<until){$('lm').textContent='Biroz kuting…';return}
  if(k==='⌫')buf=buf.slice(0,-1);else if(buf.length<4)buf+=k;
- draw();if(buf.length<4)return;
- const v=buf;buf='';
- if(mode==='set'){first=v;mode='again';$('lm').textContent='';}
- else if(mode==='again'){if(v===first){localStorage.setItem(K,await enc(v));$('lock').hidden=true;fails=0}else{mode='set';$('lm').textContent='Kodlar mos kelmadi';}}
- else if(await enc(v)===localStorage.getItem(K)){$('lock').hidden=true;fails=0;$('lm').textContent=''}
+ draw();if(buf.length<4)return;const v=buf;buf='';
+ if(mode==='set'){first=v;mode='again';$('lm').textContent=''}
+ else if(mode==='again'){if(v===first){localStorage.setItem(K,await enc(v));$('lock').hidden=true;fails=0;markRead()}else{mode='set';$('lm').textContent='Kodlar mos kelmadi'}}
+ else if(await enc(v)===localStorage.getItem(K)){$('lock').hidden=true;fails=0;$('lm').textContent='';markRead()}
  else{$('lm').textContent='Kod noto‘g‘ri';if(++fails>=5){until=Date.now()+30000;fails=0;$('lm').textContent='5 marta xato. 30 soniya kuting'}}
  title();draw()}
-$('lf').onclick=async()=>{if(confirm('Kod o‘chiriladi va qayta email/parol bilan kirasiz. Davom etasizmi?')){localStorage.removeItem(K);await signOut(auth);$('lock').hidden=true}};
-document.addEventListener('visibilitychange',()=>{if(document.hidden)hiddenAt=Date.now();else if(auth.currentUser&&hiddenAt&&Date.now()-hiddenAt>15000&&localStorage.getItem(K))lockInit()});
-/* ---- Yozmoqda… ko‘rsatkichi ---- */
-let tyUnsub=null,tyMap={},lastTy=0;
-const setTy=v=>{const u=auth.currentUser;if(u)setDoc(doc(db,'typing',u.uid),{t:v}).catch(()=>{})};
-const showTy=()=>{$('ty').textContent=Object.values(tyMap).some(t=>Date.now()-t<5000)?'yozmoqda…':''};
-setInterval(showTy,1000);
-$('t').addEventListener('input',()=>{const n=Date.now();if($('t').value.trim()===''){lastTy=0;setTy(0)}else if(n-lastTy>2000){lastTy=n;setTy(n)}});
-onAuthStateChanged(auth,u=>{if(tyUnsub){tyUnsub();tyUnsub=null}tyMap={};showTy();if(!u)return;
- tyUnsub=onSnapshot(collection(db,'typing'),s=>{tyMap={};s.forEach(d=>{if(d.id!==u.uid)tyMap[d.id]=d.data().t||0});showTy()},()=>{})});
+$('lf').onclick=async()=>{if(confirm('Kod o‘chiriladi va qayta login/parol bilan kirasiz. Davom etasizmi?')){localStorage.removeItem(K);await signOut(auth)}};
+document.addEventListener('visibilitychange',()=>{if(document.hidden)hiddenAt=Date.now();else{if(auth.currentUser&&hiddenAt&&Date.now()-hiddenAt>15000&&localStorage.getItem(K))lockInit();markRead()}});
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
 </script></body></html>
