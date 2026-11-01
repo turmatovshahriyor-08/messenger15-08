@@ -56,18 +56,35 @@ onAuthStateChanged(auth,u=>{
  if(unsub){unsub();unsub=null}
  if(!on)return;
  const q=query(collection(db,'messages'),orderBy('t'),limit(300));
- unsub=onSnapshot(q,s=>{
-  const l=$('list'),near=l.scrollHeight-l.scrollTop-l.clientHeight<80||!l.children.length;
-  l.textContent='';
-  s.forEach(d=>{const x=d.data(),e=document.createElement('div');e.className='m'+(x.uid===u.uid?' me':'');e.textContent=x.text;if(x.uid===u.uid)e.onclick=()=>{if(confirm('Xabar ikkala tomondan o‘chirilsinmi?'))deleteDoc(doc(db,'messages',d.id)).catch(()=>alert('O‘chirib bo‘lmadi'))};
-   const m=document.createElement('small');m.textContent=new Date(x.t).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});e.appendChild(m);l.appendChild(e)});
-  if(near)l.scrollTop=l.scrollHeight;
- },e=>{$('list').textContent='Ruxsat yo‘q yoki xato: '+e.code});
+ cache=[];readMap={};myRead=0;
+ unsub=onSnapshot(q,s=>{cache=s.docs;render(u,true)},e=>{$('list').textContent='Ruxsat yo‘q yoki xato: '+e.code});
+ if(rdUnsub)rdUnsub();
+ rdUnsub=onSnapshot(collection(db,'reads'),s=>{readMap={};s.forEach(d=>{if(d.id!==u.uid)readMap[d.id]=d.data().t||0});render(u,false)},()=>{});
 });
 async function send(){const v=$('t').value.trim();if(!v||!auth.currentUser)return;$('t').value='';lastTy=0;setTy(0);
  try{await addDoc(collection(db,'messages'),{text:v,uid:auth.currentUser.uid,t:Date.now()})}catch(e){$('t').value=v}}
 $('s').onclick=send;
 $('t').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
+/* ---- O‘qildi belgilari ---- */
+let cache=[],readMap={},myRead=0,rdUnsub=null;
+function render(u,scroll){
+ const l=$('list'),near=scroll&&(l.scrollHeight-l.scrollTop-l.clientHeight<80||!l.children.length),keep=l.scrollTop;
+ const rt=Math.max(0,...Object.values(readMap));
+ l.textContent='';
+ cache.forEach(d=>{const x=d.data(),mine=x.uid===u.uid,e=document.createElement('div');e.className='m'+(mine?' me':'');e.textContent=x.text;
+  if(mine)e.onclick=()=>{if(confirm('Xabar ikkala tomondan o‘chirilsinmi?'))deleteDoc(doc(db,'messages',d.id)).catch(()=>alert('O‘chirib bo‘lmadi'))};
+  const m=document.createElement('small');m.textContent=new Date(x.t).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  if(mine){const k=document.createElement('span');k.textContent=x.t<=rt?' ✓✓':' ✓';if(x.t<=rt)k.style.color='#7fe3ff';m.appendChild(k)}
+  e.appendChild(m);l.appendChild(e)});
+ if(near)l.scrollTop=l.scrollHeight;else l.scrollTop=keep;
+ markRead();
+}
+function markRead(){const u=auth.currentUser;if(!u||document.hidden||!$('lock').hidden)return;
+ const t=Math.max(0,...cache.map(d=>d.data()).filter(x=>x.uid!==u.uid).map(x=>x.t));
+ if(t>myRead){myRead=t;setDoc(doc(db,'reads',u.uid),{t}).catch(()=>{myRead=0})}}
+setInterval(markRead,2000);
+document.addEventListener('visibilitychange',markRead);
+
 /* ---- Kirish kodi (PIN) ---- */
 const K='pinh',enc=async p=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode('msgr:'+p)))].map(b=>b.toString(16).padStart(2,'0')).join('');
 let buf='',mode='',first='',fails=0,until=0,hiddenAt=0;
