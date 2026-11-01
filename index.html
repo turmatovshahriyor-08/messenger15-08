@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- v4 -->
 <html lang="uz"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#2f6fed"><link rel="manifest" href="manifest.json">
@@ -37,7 +38,9 @@ button:disabled{opacity:.5}.ic{background:none;font-size:22px;padding:6px 4px}
 #pad{display:grid;grid-template-columns:repeat(3,76px);gap:12px}
 #pad button{height:64px;border-radius:50%;background:var(--card);color:var(--text);border:1px solid var(--line);font-size:24px;padding:0}
 #lf{background:none;color:var(--mute);font-size:14px}
+#boot{margin:auto;text-align:center;color:var(--mute);padding:20px}#bootmsg{display:block;color:#e5484d;font-size:12px;margin-top:10px;word-break:break-word}
 </style></head><body>
+<div id="boot">💬 Yuklanmoqda…<span id="bootmsg"></span></div>
 <div id="auth" hidden><h2>💬 Messenger</h2>
 <input id="em" type="text" placeholder="Login" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false">
 <input id="pw" type="password" placeholder="Parol (kamida 6 belgi)" autocomplete="current-password">
@@ -50,6 +53,12 @@ button:disabled{opacity:.5}.ic{background:none;font-size:22px;padding:6px 4px}
 <input type="file" id="fi" hidden>
 <div id="sheet" hidden><div id="sc"></div></div>
 <div id="lock" hidden><div id="lt"></div><div id="ld"><i></i><i></i><i></i><i></i></div><div id="lm"></div><div id="pad"></div><button id="lf">Kodni unutdim</button></div>
+<script>
+window.__e=[];function __s(t){window.__e.push(t);var m=document.getElementById('bootmsg');if(m)m.textContent=window.__e.join(' | ')}
+addEventListener('error',function(e){__s(e.message||('yuklanmadi: '+((e.target&&(e.target.src||e.target.href))||'')))},true);
+addEventListener('unhandledrejection',function(e){__s(String(e.reason&&e.reason.message||e.reason))});
+setTimeout(function(){var b=document.getElementById('boot');if(b&&!b.hidden)__s('Internetni tekshiring va sahifani yangilang')},8000);
+</script>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
@@ -72,6 +81,7 @@ $('pw').addEventListener('keydown',e=>{if(e.key==='Enter')$('in').click()});
 $('out').onclick=()=>signOut(auth);
 
 onAuthStateChanged(auth,u=>{
+ $('boot').hidden=true;
  const on=!!u;$('auth').hidden=on;['hd','list','bar'].forEach(i=>$(i).hidden=!on);
  [unsub,rdUnsub,tyUnsub,pinUnsub].forEach(f=>f&&f());unsub=rdUnsub=tyUnsub=pinUnsub=null;
  cache=[];readMap={};tyMap={};myRead=0;pin=null;stopEdit();showTy();showPin();$('sheet').hidden=true;
